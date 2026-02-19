@@ -1,73 +1,42 @@
-<h1 align='center'>
-    <br>
-    <a href='https://github.com/IgorDGomes/German-Helper-Discord-Bot' /><img src='https://i.imgur.com/gm63Pzj.jpeg' alt='German Guru Cat' width='300'></a>
-    <br>
-    <span>German-Helper-Discord-Bot</span>
-    <br>
-</h1>
+# parolo
 
-<div align='center'>
-    <a href="#overview">Overview</a>
-    •
-    <a href="#important">Important</a>
-    •
-    <a href="#upcoming-features">Upcoming Features</a>
-    •
-    <a href="#getting-started">Getting Started</a>
-    •
-    <a href="#note">Note</a>
-</div>
+A Discord bot that sends a daily word in Italian (or any language) to configured channels across multiple servers.
 
+## Features
 
-# Overview
+- 🇮🇹 **Daily word** — sends a random translated word every day at a scheduled time
+- ✅ **Reveal interaction** — users react to reveal the translation
+- ⚙️ **Per-server config** — each server sets its own channel via `/config-daily-word`
 
-Deutsch Helfer is a Discord bot designed to help users in learning the German language directly within their Discord servers, aiming to improve their skills in German. Deutsch Helfer provide texts in different scenarios with translation, make jokes in German and have recommendations about youtube channels, podcasts, apps, movies, series, newspapers and artists. This way making your reading better, therefore your understanding of the language, is suitable for learners of all levels, from beginners to advanced.
+## Setup
 
+1. **Clone the repo**
+   ```sh
+   git clone https://github.com/mcabralpinto/parolo.git
+   cd parolo
+   ```
 
-## Important
+2. **Install dependencies**
+   ```sh
+   npm install
+   ```
 
-Deutsch Helfer is a customizable bot that can be used to learn any language you wish. You only need to change the array of objects inside of each command to match the language you want to learn.
+3. **Create a `.env` file** in the project root:
+   ```env
+   TOKEN=your_bot_token
+   CLIENT_ID=your_application_id
+   ```
 
-Tip: It's possible to ask an AI to create an array ready to use.
+4. **Register slash commands**
+   ```sh
+   node src/deploy-commands.js
+   ```
 
+5. **Start the bot**
+   ```sh
+   node src/index.js
+   ```
 
-## Upcoming Features
+## Credits
 
-- Quiz command
-
-- Daily words command
-
-
-## Getting Started
-
-To start using Deutsch Helfer in your Discord server, follow these steps:
-
-1. Install [Nodejs](https://nodejs.org/en) (It's recommended to install the latest LTS version)
-
-2. Clone the repository to your machine:
-
-    `git clone https://github.com/IgorDGomes/German-Helper-Discord-Bot.git`
-
-3. Open the folder:
-
-    `cd German-Helper-Discord-Bot`
-
-4. Install dependencies:
-
-    `npm i`
-
-5. Start the bot:
-
-    `node index.js`
-
-6. In case of adding more commands before starting the bot run this:
-
-    `node deploy-commands.js`
-
-7. Enter the website and follow the next steps:
-
-    [My Bots](https://my-bots.netlify.app/)
-
-## Note
-
-Deutsch Helfer was created for studying purposes, so that i could improve my Javascript and German.
+Structure based on [German Helper](https://github.com/IgorDGomes/German-Helper-Discord-Bot)
