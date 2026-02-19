@@ -1,0 +1,78 @@
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
+
+const COMMON_WORD_LIMIT = 5000; 
+const data = require('subtlex-word-frequencies');
+const commonWords = data.slice(0, COMMON_WORD_LIMIT).map(item => 
+  typeof item === 'string' ? item : item.word || item
+);
+
+const getRandomItalianWord = async () => {
+    try {
+        const randomWord = commonWords[Math.floor(Math.random() * commonWords.length)];
+        const translationData = await fetch(
+            `https://api.mymemory.translated.net/get?q=${encodeURIComponent(randomWord)}&langpair=en|it`
+        ).then(res => res.json());
+        const translation = translationData.responseData.translatedText;
+        
+        return {
+            word: randomWord,
+            translation: translation
+        };
+    } catch (error) {
+        console.error('Error fetching word:', error);
+        return {
+            word: 'Errore recuperando la parola',
+            translation: 'Error fetching word'
+        };
+    }
+};
+
+const createBox = async (word, translation, description) => {
+    const wordEmbed = new EmbedBuilder()
+        .setColor(0x0099FF)
+        .setTitle('**Random Word**')
+        .setDescription(description)
+        .setTimestamp()
+        .addFields(
+            // { name: '\u200B', value: '\u200B' },
+            { name: '🇮🇹 Italian', value: translation },
+            { name: '🇬🇧 English', value: word },
+            // { name: '\u200B', value: '\u200B' },
+        );
+    return wordEmbed;
+};
+
+module.exports = {
+    cooldown: 5,
+    data: new SlashCommandBuilder()
+        .setName('word')
+        .setDescription('Gives a random Italian word for which you can get the English translation.'),
+
+    async execute(interaction) {
+        await interaction.deferReply()
+        
+        const { word, translation } = await getRandomItalianWord()
+
+        const hiddenEmbed = createBox(word, '❓', 'React with ✅ to reveal the English translation')
+
+        const message = await interaction.editReply({ embeds: [hiddenEmbed] })
+        
+        await message.react('✅')
+        
+        const filter = (reaction, user) => {
+            return reaction.emoji.toString() === '✅' && user.id === interaction.user.id
+        }
+        
+        const collector = message.createReactionCollector({ filter, max: 1, time: 60000 })
+        
+        collector.on('collect', async () => {
+            const revealEmbed = createBox(word, translation, 'Translation revealed!')
+            
+            await message.edit({ embeds: [revealEmbed] })
+        })
+        
+        collector.on('end', () => {
+            // message.reactions.removeAll()
+        })
+    }
+}
