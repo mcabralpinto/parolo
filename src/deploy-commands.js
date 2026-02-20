@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 const fs = require('node:fs')
 const path = require('node:path')
 
-dotenv.config()
+dotenv.config({ path: path.join(__dirname, '..', '.env') })
 const { TOKEN, CLIENT_ID } = process.env
 
 const commandsPath = path.join(__dirname, 'commands')

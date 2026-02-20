@@ -1,11 +1,11 @@
 const { Client, Events, GatewayIntentBits, Collection, EmbedBuilder } = require('discord.js')
 
 const dotenv = require('dotenv')
-dotenv.config()
+const path = require('node:path')
+dotenv.config({ path: path.join(__dirname, '..', '.env') })
 const { TOKEN, CLIENT_ID } = process.env
 
 const fs = require('node:fs')
-const path = require('node:path')
 
 const { scheduleAtHour } = require('./other/word_daily')
 
@@ -37,7 +37,7 @@ for (const file of commandFiles) {
 client.once(Events.ClientReady, async readyClient => {
     console.log(`Ready! Logged in as ${readyClient.user.tag}`)
 
-    scheduleAtHour(client, 20, 8)
+    scheduleAtHour(client, 16, 0)
 });
 
 client.login(TOKEN)
@@ -83,7 +83,12 @@ client.on(Events.InteractionCreate, async interaction => {
             await command.execute(interaction)
         } catch (error) {
             console.error(error)
-            await interaction.reply('An error ocurred executing this command')
+            const errorMessage = 'An error occurred executing this command'
+            if (interaction.replied || interaction.deferred) {
+                await interaction.followUp({ content: errorMessage, ephemeral: true }).catch(console.error)
+            } else {
+                await interaction.reply({ content: errorMessage, ephemeral: true }).catch(console.error)
+            }
         }
     }
 })

@@ -95,7 +95,7 @@ const getChannel = async (client, guildId) => {
 const scheduleAtHour = (client, hour = 0, minute = 0) => {
     const now = new Date()
     let next = new Date(now)
-    next.setHours(hour, minute, 30, 0)
+    next.setHours(hour, minute, 0, 0)
     if (next <= now) next.setDate(next.getDate() + 1)
     const ms = next - now
     console.log('Current time:', now)
