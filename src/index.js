@@ -1,4 +1,4 @@
-const { Client, Events, GatewayIntentBits, Collection, EmbedBuilder } = require('discord.js')
+const { Client, Events, GatewayIntentBits, Collection, EmbedBuilder, MessageFlags } = require('discord.js')
 
 const dotenv = require('dotenv')
 const path = require('node:path')
@@ -85,9 +85,9 @@ client.on(Events.InteractionCreate, async interaction => {
             console.error(error)
             const errorMessage = 'An error occurred executing this command'
             if (interaction.replied || interaction.deferred) {
-                await interaction.followUp({ content: errorMessage, ephemeral: true }).catch(console.error)
+                await interaction.followUp({ content: errorMessage, flags: [MessageFlags.Ephemeral] }).catch(console.error)
             } else {
-                await interaction.reply({ content: errorMessage, ephemeral: true }).catch(console.error)
+                await interaction.reply({ content: errorMessage, flags: [MessageFlags.Ephemeral] }).catch(console.error)
             }
         }
     }
