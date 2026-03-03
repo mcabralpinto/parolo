@@ -29,9 +29,8 @@ const getRandomItalianWord = async () => {
     }
 };
 
-const sendDailyWord = async (channel) => {
+const sendDailyWord = async (channel, word, translation) => {
     try {
-        const { word, translation } = await getRandomItalianWord()
 
         const hiddenEmbed = new EmbedBuilder()
             .setColor(0x0099FF)
@@ -106,13 +105,15 @@ const scheduleAtHour = (client, hour = 0, minute = 0) => {
         for (const [guildId] of client.guilds.cache) {
             const channel = await getChannel(client, guildId)
             if (!channel) continue
-            sendDailyWord(channel)
+            const { word, translation } = await getRandomItalianWord()
+            sendDailyWord(channel, word, translation)
         }
         setInterval(async () => {
             for (const [guildId] of client.guilds.cache) {
                 const channel = await getChannel(client, guildId)
                 if (!channel) continue
-                sendDailyWord(channel)
+                const { word, translation } = await getRandomItalianWord()
+                sendDailyWord(channel, word, translation)
             }
         }, 24 * 60 * 60 * 1000)
     }, ms)

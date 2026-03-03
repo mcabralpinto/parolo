@@ -32,8 +32,8 @@ const createBox = async (interaction) => {
         .setTimestamp()
         .addFields(
             // { name: '\u200B', value: '\u200B' },
-            { name: '🇬🇧 English', value: translation },
             { name: '🇮🇹 Italian', value: text },
+            { name: '🇬🇧 English', value: translation },
             // { name: '\u200B', value: '\u200B' },
         );
 
