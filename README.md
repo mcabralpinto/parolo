@@ -4,9 +4,9 @@ A Discord bot that sends a daily word in Italian (or any language) to configured
 
 ## Features
 
-- 🇮🇹 **Daily word** — sends a random translated word every day at a scheduled time
-- ✅ **Reveal interaction** — users react to reveal the translation
-- ⚙️ **Per-server config** — each server sets its own channel via `/config-daily-word`
+- **Daily word** - sends a random translated word every day at a scheduled time to a configurable channel
+- **Both-way translation** - command that translates text from English to Italian and vice-versa
+- **Random word** - command that sends a random word and its translation to the users; has variants that hides one of the words
 
 ## Setup
 
