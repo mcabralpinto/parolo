@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } = require('discord.js')
 const { getRandomWord, MAX_WORD_RANGE } = require('../other/word_utils')
 
 const createBox = (word, translation, description) => {
@@ -32,25 +32,36 @@ module.exports = {
             const wordRange = interaction.options.getInteger('range');
             const { word, translation } = await getRandomWord(wordRange, 'en|it')
 
-            const hiddenEmbed = createBox(word, '❓', 'React with ✅ to reveal the Italian translation')
+            const hiddenEmbed = createBox(word, '❓', 'Click the button to reveal the Italian translation')
 
-            const message = await interaction.editReply({ embeds: [hiddenEmbed] })
+            const revealButton = new ButtonBuilder()
+                .setCustomId('reveal')
+                .setLabel('✅ Reveal')
+                .setStyle(ButtonStyle.Primary)
 
-            await message.react('✅')
+            const row = new ActionRowBuilder().addComponents(revealButton)
 
-            const filter = (reaction, user) => {
-                return reaction.emoji.toString() === '✅' && user.id === interaction.user.id
-            }
+            const message = await interaction.editReply({ embeds: [hiddenEmbed], components: [row] })
 
-            const collector = message.createReactionCollector({ filter, max: 1, time: 60000 })
-
-            collector.on('collect', async () => {
-                const revealEmbed = createBox(word, translation, 'Translation revealed!')
-                await message.edit({ embeds: [revealEmbed] })
+            const collector = message.createMessageComponentCollector({
+                componentType: ComponentType.Button,
+                filter: i => i.customId === 'reveal' && i.user.id === interaction.user.id,
+                max: 1,
+                time: 60000
             })
 
-            collector.on('end', () => {
-                // message.reactions.removeAll().catch(console.error)
+            collector.on('collect', async i => {
+                const revealEmbed = createBox(word, translation, 'Translation revealed!')
+                await i.update({ embeds: [revealEmbed], components: [] })
+            })
+
+            collector.on('end', async (collected) => {
+                if (collected.size === 0) {
+                    const disabledRow = new ActionRowBuilder().addComponents(
+                        ButtonBuilder.from(revealButton).setDisabled(true)
+                    )
+                    await interaction.editReply({ components: [disabledRow] }).catch(() => { })
+                }
             })
         } catch (error) {
             console.error('Error in random-en command:', error)
