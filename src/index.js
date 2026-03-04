@@ -42,36 +42,7 @@ client.once(Events.ClientReady, async readyClient => {
 
 client.login(TOKEN)
 
-/*! Embed options
-const bwatch = new EmbedBuilder()
-    .setColor('Green')
-    .setTitle('Some title')
-    .setDescription('Some description here')
-    .addFields(
-        { name: 'Regular field title', value: 'Some value here' },
-        { name: '\u200B', value: '\u200B' },
-        { name: 'Inline field title', value: 'Some value here', inline: true },
-        { name: 'Inline field title', value: 'Some value here', inline: true },
-    )
-    .addFields({ name: 'Inline field title', value: 'Some value here', inline: true })
-    .setImage('https://i.imgur.com/AfFp7pu.png')
-    .setTimestamp()
-    .setFooter({ text: 'Some footer text here', iconURL: 'https://i.imgur.com/AfFp7pu.png' });
-*/
-
 client.on(Events.InteractionCreate, async interaction => {
-    // if (interaction.isStringSelectMenu()) {
-    //     const selected = interaction.values[0]
-    // switch (selected) {
-    //     // Beginner
-
-    //     case 'watch':
-    //         await interaction.reply({ embeds: [bwatch] })
-    //         break;
-
-    //     default:
-    //         break;
-    // }
 
     if (interaction.isChatInputCommand()) {
         const command = interaction.client.commands.get(interaction.commandName)
@@ -95,3 +66,4 @@ client.on(Events.InteractionCreate, async interaction => {
 
 
 // node index.js
+
