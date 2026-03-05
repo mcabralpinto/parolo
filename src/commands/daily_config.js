@@ -35,6 +35,10 @@ module.exports = {
 
         if (channel) {
             config[guildId].dailyChannelId = channel.id
+            const configDir = path.dirname(configPath)
+            if (!fs.existsSync(configDir)) {
+                fs.mkdirSync(configDir, { recursive: true })
+            }
             fs.writeFileSync(configPath, JSON.stringify(config, null, 2))
             console.log(`Server "${guildName}" had its Daily Word channel changed to #${channel.name}`)
 
@@ -47,6 +51,10 @@ module.exports = {
             await interaction.reply({ embeds: [embed] })
         } else {
             delete config[guildId].dailyChannelId
+            const configDir = path.dirname(configPath)
+            if (!fs.existsSync(configDir)) {
+                fs.mkdirSync(configDir, { recursive: true })
+            }
             fs.writeFileSync(configPath, JSON.stringify(config, null, 2))
             console.log(`Server "${guildName}" had its Daily Word channel cleared.`)
 
